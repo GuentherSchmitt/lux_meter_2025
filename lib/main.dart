@@ -38,13 +38,15 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   StreamSubscription<int>? _lightEvents;
   double luxValue = 100;
-  double maxLuxValue = 3000;
+  double sliderValue = 100;
+  double maxSliderValue = 3000;
 
   void onData(int value) async {
-    print("Lux value: $luxValue");
+    print("value in onData: $value");
     setState(() {
-      if (value < maxLuxValue) {
-        luxValue = value.toDouble();
+      luxValue = value.toDouble();
+      if (luxValue < maxSliderValue) {
+        sliderValue = luxValue;
       }
     });
   }
@@ -82,13 +84,13 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             _getRadialGauge(),
             Slider(
-              value: luxValue,
+              value: sliderValue,
               min: 0,
-              max: maxLuxValue,
+              max: maxSliderValue,
               onChanged: (value) {
-                print(value);
                 setState(() {
-                  luxValue = value;
+                  sliderValue = value;
+                  luxValue = sliderValue;
                 });
               },
             ),
@@ -104,32 +106,32 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _getRadialGauge() {
     return SfRadialGauge(
       title: const GaugeTitle(
-        text: 'Speedometer',
+        text: 'Lux Meter',
         textStyle: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
       ),
       axes: <RadialAxis>[
         RadialAxis(
           minimum: 0,
-          maximum: 150,
+          maximum: 2000,
           ranges: <GaugeRange>[
             GaugeRange(
               startValue: 0,
-              endValue: 50,
-              color: Colors.green,
+              endValue: 300,
+              color: Colors.red,
               startWidth: 10,
               endWidth: 10,
             ),
             GaugeRange(
-              startValue: 50,
-              endValue: 100,
+              startValue: 300,
+              endValue: 1000,
               color: Colors.orange,
               startWidth: 10,
               endWidth: 10,
             ),
             GaugeRange(
-              startValue: 100,
-              endValue: 150,
-              color: Colors.red,
+              startValue: 1000,
+              endValue: 2000,
+              color: Colors.green,
               startWidth: 10,
               endWidth: 10,
             ),
